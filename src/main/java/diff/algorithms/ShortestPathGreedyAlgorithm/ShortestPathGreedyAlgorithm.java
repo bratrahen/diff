@@ -25,10 +25,10 @@ public class ShortestPathGreedyAlgorithm {
 
             if (edge.isVertical()) {
                 Object element = editGraph.getElementInNewCorrespondingTo(edge);
-                editCommands.add(0, EditCommand.insert(positionInOriginal, element));
+                editCommands.add(0, EditCommand.insert(element, positionInOriginal));
             } else if (edge.isHorizontal()) {
                 Object element = editGraph.getElementInOriginalCorrespondingTo(edge);
-                editCommands.add(0, EditCommand.delete(positionInOriginal, element));
+                editCommands.add(0, EditCommand.delete(element, positionInOriginal));
             } else {
                 throw new RuntimeException("Non-diagonal edge is neither vertical nor horizontal.");
             }

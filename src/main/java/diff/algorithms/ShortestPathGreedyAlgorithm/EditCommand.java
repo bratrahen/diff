@@ -11,11 +11,11 @@ public class EditCommand {
         this.element = element;
     }
 
-    public static EditCommand insert(int position, Object element) {
+    public static EditCommand insert(Object element, int position) {
         return new EditCommand(EditCommand.Type.INSERT, position, element);
     }
 
-    public static EditCommand delete(int position, Object element) {
+    public static EditCommand delete(Object element, int position) {
         return new EditCommand(EditCommand.Type.DELETE, position, element);
     }
 
