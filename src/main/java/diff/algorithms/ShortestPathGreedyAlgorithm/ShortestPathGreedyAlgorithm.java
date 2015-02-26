@@ -1,3 +1,5 @@
+package diff.algorithms.ShortestPathGreedyAlgorithm;
+
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -172,11 +174,11 @@ class NonDiagonalEdgeIterator implements Iterator<Edge> {
             k = k + 1;
         else
             k = k - 1;
-//		
+//
 //		if (result.isHorizontal())
 //			k = k - 1;
 //		else
-//			k = k + 1;	
+//			k = k + 1;
 
         return result;
     }

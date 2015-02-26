@@ -1,3 +1,5 @@
+package diff.algorithms.ShortestPathGreedyAlgorithm;
+
 public class EditCommand {
     final public Type type;
     final public int position;

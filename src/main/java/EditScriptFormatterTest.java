@@ -1,4 +1,5 @@
 import com.google.common.collect.ImmutableList;
+import diff.algorithms.ShortestPathGreedyAlgorithm.EditCommand;
 
 public class EditScriptFormatterTest implements EditScriptFormatter {
 
