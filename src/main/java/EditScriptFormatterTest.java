@@ -4,7 +4,7 @@ public class EditScriptFormatterTest implements EditScriptFormatter {
 
     @Override
     public String format(ImmutableList<EditCommand> commands) {
-        String result = new String();
+        String result = "";
         for (EditCommand cmd : commands) {
             if (cmd.type == EditCommand.Type.INSERT)
                 result += formatInsertCommand(cmd);

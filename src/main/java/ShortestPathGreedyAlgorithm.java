@@ -5,7 +5,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public class ShortestPathGreedyAlgorithm {
+class ShortestPathGreedyAlgorithm {
 
     //==============================================================================
     public ImmutableList<EditCommand> diff(String A, String B) {
@@ -35,14 +35,14 @@ public class ShortestPathGreedyAlgorithm {
 }
 
 class EditGraph {
-    public Object[] A;
-    public Object[] B;
-    private int N;
-    private int M;
-    private int MAX;
+    public final Object[] A;
+    public final Object[] B;
+    private final int N;
+    private final int M;
+    private final int MAX;
 
-    private Map<Integer, Integer> endpointsInDiagonalK = new HashMap<Integer, Integer>();
-    private List<Map<Integer, Integer>> enpointsOfFarthestReachingDPaths = new ArrayList<Map<Integer, Integer>>();
+    private final Map<Integer, Integer> endpointsInDiagonalK = new HashMap<Integer, Integer>();
+    private final List<Map<Integer, Integer>> enpointsOfFarthestReachingDPaths = new ArrayList<Map<Integer, Integer>>();
 
     public EditGraph(Object[] A, Object[] B) {
         this.A = A;
@@ -64,7 +64,7 @@ class EditGraph {
 
     //==============================================================================
     public int getLengthOfShortestEditScript() {
-        getEnpointsOfFarthestReachingDPaths(0);
+        getEndpointsOfFarthestReachingDPaths(0);
         return enpointsOfFarthestReachingDPaths.size() - 1;
     }
 
@@ -74,16 +74,16 @@ class EditGraph {
     }
 
     //==============================================================================
-    public Map<Integer, Integer> getEnpointsOfFarthestReachingDPaths(int D) {
+    public Map<Integer, Integer> getEndpointsOfFarthestReachingDPaths(int D) {
         boolean isCached = enpointsOfFarthestReachingDPaths.size() > 0;
-        if (isCached == false)
-            findEnpointsOfFarthestReachingDPaths();
+        if (!isCached)
+            findEndpointsOfFarthestReachingDPaths();
 
         return enpointsOfFarthestReachingDPaths.get(D);
     }
 
     //==============================================================================
-    private List<Map<Integer, Integer>> findEnpointsOfFarthestReachingDPaths() {
+    private List<Map<Integer, Integer>> findEndpointsOfFarthestReachingDPaths() {
         endpointsInDiagonalK.clear();
         endpointsInDiagonalK.put(1, 0);
         //D-path is a path starting at (0,0) that has exactly D non-diagonal edges.
@@ -95,7 +95,7 @@ class EditGraph {
                 Point endpoint = findEndpointOfFarthestReachingDPathInDiagonalK(D, k);
                 endpointsInDiagonalK.put(k, endpoint.x);
 
-                if (isLongestCommonSubsequenceFound(endpoint) == true) {
+                if (isLongestCommonSubsequenceFound(endpoint)) {
                     storeEndpointsOfDPath(endpointsInDiagonalK);
                     break outside;
                 }
@@ -124,7 +124,7 @@ class EditGraph {
 
     //==============================================================================
     private void traverseForwardAlongDiagonal(Point result) {
-        while (isLongestCommonSubsequenceFound(result) == false && isMatchPoint(result.x + 1, result.y + 1) == true) {
+        while (!isLongestCommonSubsequenceFound(result) && isMatchPoint(result.x + 1, result.y + 1)) {
             result.translate(1, 1);
         }
     }
@@ -145,7 +145,7 @@ class EditGraph {
 
 //==============================================================================
 class NonDiagonalEdgeIterator implements Iterator<Edge> {
-    private EditGraph editGraph;
+    private final EditGraph editGraph;
     private int d;
     private int k;
 
@@ -194,7 +194,7 @@ class NonDiagonalEdgeIterator implements Iterator<Edge> {
     }
 
     private Point findEdgeStart() {
-        Map<Integer, Integer> Vd1 = editGraph.getEnpointsOfFarthestReachingDPaths(d - 1);
+        Map<Integer, Integer> Vd1 = editGraph.getEndpointsOfFarthestReachingDPaths(d - 1);
         int x;
         int y;
         if (Vd1.containsKey(k + 1)) {
@@ -213,7 +213,7 @@ class NonDiagonalEdgeIterator implements Iterator<Edge> {
     //==============================================================================
     private Point traverseBackwardAlongDiagonal(Point endpoint) {
         Point result = new Point(endpoint);
-        while (result.x > 0 && result.y > 0 && editGraph.isMatchPoint(result.x, result.y) == true)
+        while (result.x > 0 && result.y > 0 && editGraph.isMatchPoint(result.x, result.y))
             result.translate(-1, -1);
 
         return result;
@@ -221,7 +221,7 @@ class NonDiagonalEdgeIterator implements Iterator<Edge> {
 
     //==============================================================================
     private Point getEnpointOfFarthestReachingDPathInDiagonalK(int d, int k) {
-        Map<Integer, Integer> Vd = editGraph.getEnpointsOfFarthestReachingDPaths(d);
+        Map<Integer, Integer> Vd = editGraph.getEndpointsOfFarthestReachingDPaths(d);
         int x = Vd.get(k);
         int y = x - k;
         return new Point(x, y);
@@ -229,8 +229,8 @@ class NonDiagonalEdgeIterator implements Iterator<Edge> {
 }
 
 class Edge {
-    private Point start;
-    private Point end;
+    private final Point start;
+    private final Point end;
 
     Edge(Point start, Point end) {
         this.start = start;

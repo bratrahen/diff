@@ -5,11 +5,11 @@ public class NormalDiffOutputFormatter implements EditScriptFormatter {
     @Override
     public String format(ImmutableList<EditCommand> commands) {
         if (commands.size() == 0)
-            return new String();
+            return "";
 
-        String result = new String();
-        String header = new String();
-        String body = new String();
+        String result = "";
+        String header;
+        String body;
 
         int start = 0;
         int end = 0;
