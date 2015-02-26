@@ -1,5 +1,3 @@
-package diff;
-
 public class EditCommand {
 	public enum Type {INSERT, DELETE};
 	

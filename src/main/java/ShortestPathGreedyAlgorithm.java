@@ -1,5 +1,3 @@
-package diff;
-
 import java.util.*;
 import java.awt.Point;
 
