@@ -1,4 +1,4 @@
-package EditScriptFormatter;
+package diff.EditScriptFormatter;
 
 import com.google.common.collect.ImmutableList;
 import diff.algorithms.ShortestPathGreedyAlgorithm.EditCommand;

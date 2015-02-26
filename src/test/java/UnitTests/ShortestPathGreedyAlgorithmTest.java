@@ -1,14 +1,15 @@
 package UnitTests;
 
-import EditScriptFormatter.NormalDiffOutputFormatter;
-import EditScriptFormatter.SimpleEditScriptFormatter;
+
 import com.google.common.collect.ImmutableList;
+import diff.EditScriptFormatter.EditScriptFormatter;
+import diff.EditScriptFormatter.NormalDiffOutputFormatter;
+import diff.EditScriptFormatter.SimpleEditScriptFormatter;
 import diff.algorithms.ShortestPathGreedyAlgorithm.EditCommand;
 import diff.algorithms.ShortestPathGreedyAlgorithm.ShortestPathGreedyAlgorithm;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
 
 public class ShortestPathGreedyAlgorithmTest {
 
@@ -115,7 +116,7 @@ public class ShortestPathGreedyAlgorithmTest {
         String result1 = algorithm.diff(sequenceA, sequenceB).toString();
         String result2 = algorithm.diff(sequenceA, sequenceB).toString();
 
-        assertEquals(result1, result2);
+        Assert.assertEquals(result1, result2);
     }
 
     @Test
