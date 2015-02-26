@@ -7,21 +7,34 @@ import java.util.List;
 import java.util.Map;
 
 class EditGraph {
-    public final Object[] A;
-    public final Object[] B;
+    public final Object[] originalElements;
+    public final Object[] newElements;
     private final int N;
     private final int M;
     private final int MAX;
 
     private final Map<Integer, Integer> endpointsInDiagonalK = new HashMap<Integer, Integer>();
-    private final List<Map<Integer, Integer>> enpointsOfFarthestReachingDPaths = new ArrayList<Map<Integer, Integer>>();
+    private final List<Map<Integer, Integer>> endpointsOfFarthestReachingDPaths = new ArrayList<Map<Integer, Integer>>();
 
-    public EditGraph(Object[] A, Object[] B) {
-        this.A = A;
-        this.B = B;
-        N = A.length;
-        M = B.length;
+    //==============================================================================
+    public EditGraph(Object[] originalElements, Object[] newElements) {
+        this.originalElements = originalElements;
+        this.newElements = newElements;
+        N = originalElements.length;
+        M = newElements.length;
         MAX = N + M;
+    }
+
+    //==============================================================================
+    public Object getElementInNewCorrespondingTo(Edge edge) {
+        //convert to zero index
+        return newElements[edge.getEndPoint().y - 1];
+    }
+
+    //==============================================================================
+    public Object getElementInOriginalCorrespondingTo(Edge edge) {
+        //convert to zero index
+        return originalElements[edge.getEndPoint().x - 1];
     }
 
     //==============================================================================
@@ -31,13 +44,13 @@ class EditGraph {
             return false;
 
         //convert to zero index
-        return A[x - 1].equals(B[y - 1]);
+        return originalElements[x - 1].equals(newElements[y - 1]);
     }
 
     //==============================================================================
     public int getLengthOfShortestEditScript() {
         getEndpointsOfFarthestReachingDPaths(0);
-        return enpointsOfFarthestReachingDPaths.size() - 1;
+        return endpointsOfFarthestReachingDPaths.size() - 1;
     }
 
     //==============================================================================
@@ -47,11 +60,11 @@ class EditGraph {
 
     //==============================================================================
     public Map<Integer, Integer> getEndpointsOfFarthestReachingDPaths(int D) {
-        boolean isCached = enpointsOfFarthestReachingDPaths.size() > 0;
+        boolean isCached = endpointsOfFarthestReachingDPaths.size() > 0;
         if (!isCached)
             findEndpointsOfFarthestReachingDPaths();
 
-        return enpointsOfFarthestReachingDPaths.get(D);
+        return endpointsOfFarthestReachingDPaths.get(D);
     }
 
     //==============================================================================
@@ -62,7 +75,7 @@ class EditGraph {
         outside:
         for (int D = 0; D <= MAX; D++) {
             //We number the diagonals in the edit graph so that diagonal k consists of points (x,y) for which x - y = k
-            //A D-path end solely on odd diagonals when D is odd and even diagonals when D is even
+            //originalElements D-path end solely on odd diagonals when D is odd and even diagonals when D is even
             for (int k = -D; k <= D; k += 2) {
                 Point endpoint = findEndpointOfFarthestReachingDPathInDiagonalK(D, k);
                 endpointsInDiagonalK.put(k, endpoint.x);
@@ -75,7 +88,7 @@ class EditGraph {
             storeEndpointsOfDPath(endpointsInDiagonalK);
         }
 
-        return enpointsOfFarthestReachingDPaths;
+        return endpointsOfFarthestReachingDPaths;
     }
 
     //==============================================================================
@@ -110,7 +123,7 @@ class EditGraph {
     private void storeEndpointsOfDPath(Map<Integer, Integer> endpoints) {
         Map<Integer, Integer> copy = new HashMap<Integer, Integer>();
         copy.putAll(endpointsInDiagonalK);
-        enpointsOfFarthestReachingDPaths.add(copy);
+        endpointsOfFarthestReachingDPaths.add(copy);
     }
 
 }

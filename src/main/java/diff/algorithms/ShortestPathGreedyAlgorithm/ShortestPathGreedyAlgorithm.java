@@ -9,28 +9,30 @@ import java.util.List;
 public class ShortestPathGreedyAlgorithm {
 
     //==============================================================================
-    public ImmutableList<EditCommand> diff(String A, String B) {
-        return diff(ArrayUtils.toObject(A.toCharArray()), ArrayUtils.toObject(B.toCharArray()));
+    public ImmutableList<EditCommand> diff(String originalString, String newString) {
+        return diff(ArrayUtils.toObject(originalString.toCharArray()), ArrayUtils.toObject(newString.toCharArray()));
     }
 
     //==============================================================================
-    public ImmutableList<EditCommand> diff(Object[] A, Object[] B) {
-        EditGraph editGraph = new EditGraph(A, B);
+    public ImmutableList<EditCommand> diff(Object[] originalElements, Object[] newElements) {
+        EditGraph editGraph = new EditGraph(originalElements, newElements);
         List<EditCommand> editCommands = new LinkedList<EditCommand>();
 
-        NonDiagonalEdgeIterator it = new NonDiagonalEdgeIterator(editGraph);
+        BackwardNonDiagonalEdgeIterator it = new BackwardNonDiagonalEdgeIterator(editGraph);
         while (it.hasNext()) {
-            Edge nonDiagonalEdge = it.next();
-            int position = nonDiagonalEdge.getEndPoint().x;
-            if (nonDiagonalEdge.isVertical()) {
-                Object element = editGraph.B[nonDiagonalEdge.getEndPoint().y - 1];
-                editCommands.add(0, EditCommand.insert(position, element));
+            Edge edge = it.next();
+            int positionInOriginal = edge.getEndPoint().x;
+
+            if (edge.isVertical()) {
+                Object element = editGraph.getElementInNewCorrespondingTo(edge);
+                editCommands.add(0, EditCommand.insert(positionInOriginal, element));
+            } else if (edge.isHorizontal()) {
+                Object element = editGraph.getElementInOriginalCorrespondingTo(edge);
+                editCommands.add(0, EditCommand.delete(positionInOriginal, element));
             } else {
-                Object element = editGraph.A[nonDiagonalEdge.getEndPoint().x - 1];
-                editCommands.add(0, EditCommand.delete(position, element));
+                throw new RuntimeException("Non-diagonal edge is neither vertical nor horizontal.");
             }
         }
-
         return ImmutableList.copyOf(editCommands);
     }
 }

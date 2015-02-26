@@ -6,13 +6,13 @@ import java.util.Iterator;
 import java.util.Map;
 
 //==============================================================================
-class NonDiagonalEdgeIterator implements Iterator<Edge> {
+class BackwardNonDiagonalEdgeIterator implements Iterator<Edge> {
     private final EditGraph editGraph;
     private int d;
     private int k;
 
 
-    public NonDiagonalEdgeIterator(EditGraph editGraph) {
+    public BackwardNonDiagonalEdgeIterator(EditGraph editGraph) {
         this.editGraph = editGraph;
         d = editGraph.getLengthOfShortestEditScript();
         k = editGraph.getDiagonalOfLowerRightCorner();
