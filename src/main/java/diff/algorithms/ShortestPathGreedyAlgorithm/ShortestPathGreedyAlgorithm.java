@@ -21,14 +21,13 @@ public class ShortestPathGreedyAlgorithm {
         BackwardNonDiagonalEdgeIterator it = new BackwardNonDiagonalEdgeIterator(editGraph);
         while (it.hasNext()) {
             Edge edge = it.next();
-            int positionInOriginal = edge.getEndPoint().x;
 
             if (edge.isVertical()) {
                 Object element = editGraph.getElementInNewCorrespondingTo(edge);
-                editCommands.add(0, EditCommand.insert(element, positionInOriginal));
+                editCommands.add(0, EditCommand.insert(element, edge.positionInOriginal()));
             } else if (edge.isHorizontal()) {
                 Object element = editGraph.getElementInOriginalCorrespondingTo(edge);
-                editCommands.add(0, EditCommand.delete(element, positionInOriginal));
+                editCommands.add(0, EditCommand.delete(element, edge.positionInOriginal()));
             } else {
                 throw new RuntimeException("Non-diagonal edge is neither vertical nor horizontal.");
             }

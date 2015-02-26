@@ -22,4 +22,13 @@ class Edge {
     public Point getEndPoint() {
         return new Point(end);
     }
+
+    public int positionInOriginal() {
+        return end.x;
+    }
+
+    public int positionInNew() {
+        return end.y;
+    }
+
 }

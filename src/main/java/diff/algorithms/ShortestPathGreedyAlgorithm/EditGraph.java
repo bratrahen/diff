@@ -28,13 +28,13 @@ class EditGraph {
     //==============================================================================
     public Object getElementInNewCorrespondingTo(Edge edge) {
         //convert to zero index
-        return newElements[edge.getEndPoint().y - 1];
+        return newElements[edge.positionInNew() - 1];
     }
 
     //==============================================================================
     public Object getElementInOriginalCorrespondingTo(Edge edge) {
         //convert to zero index
-        return originalElements[edge.getEndPoint().x - 1];
+        return originalElements[edge.positionInOriginal() - 1];
     }
 
     //==============================================================================
