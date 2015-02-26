@@ -9,10 +9,11 @@ import java.util.Map;
 class EditGraph {
     private final Object[] originalElements;
     private final Object[] newElements;
-    private final int N;
-    private final int M;
-    private final int MAX;
+    private final int originalSize;
+    private final int newSize;
+    private final int editScriptMaxSize;
 
+    //Map<k,x> because by definition y = x - k
     private final Map<Integer, Integer> endpointsInDiagonalK = new HashMap<Integer, Integer>();
     private final List<Map<Integer, Integer>> endpointsOfFarthestReachingDPaths = new ArrayList<Map<Integer, Integer>>();
 
@@ -20,42 +21,50 @@ class EditGraph {
     public EditGraph(Object[] originalElements, Object[] newElements) {
         this.originalElements = originalElements;
         this.newElements = newElements;
-        N = originalElements.length;
-        M = newElements.length;
-        MAX = N + M;
+        originalSize = originalElements.length;
+        newSize = newElements.length;
+        editScriptMaxSize = originalSize + newSize;
+    }
+
+    //==============================================================================
+    private static int zeroIndexFrom(int xOrY) {
+        return xOrY - 1;
     }
 
     //==============================================================================
     public Object getElementInNewCorrespondingTo(Edge edge) {
-        //convert to zero index
-        return newElements[edge.positionInNew() - 1];
+        return newElements[zeroIndexFrom(edge.positionInNew())];
     }
 
     //==============================================================================
     public Object getElementInOriginalCorrespondingTo(Edge edge) {
         //convert to zero index
-        return originalElements[edge.positionInOriginal() - 1];
+        return originalElements[zeroIndexFrom(edge.positionInOriginal())];
+    }
+
+    //==============================================================================
+    public boolean isMatchPoint(Point point) {
+        return isMatchPoint(point.x, point.y);
     }
 
     //==============================================================================
     public boolean isMatchPoint(int x, int y) {
-        boolean isOutsideGraphBoundaries = x < 1 || x > N || y < 1 || y > M;
+        boolean isOutsideGraphBoundaries = x < 1 || x > originalSize || y < 1 || y > newSize;
         if (isOutsideGraphBoundaries)
             return false;
 
-        //convert to zero index
-        return originalElements[x - 1].equals(newElements[y - 1]);
+        return originalElements[zeroIndexFrom(x)].equals(newElements[zeroIndexFrom(y)]);
     }
 
     //==============================================================================
     public int getLengthOfShortestEditScript() {
         getEndpointsOfFarthestReachingDPaths(0);
-        return endpointsOfFarthestReachingDPaths.size() - 1;
+        return endpointsOfFarthestReachingDPaths.size() - 1; //minus one because we start outside graph boundary
     }
 
     //==============================================================================
     public int getDiagonalOfLowerRightCorner() {
-        return N - M;
+        return originalSize - newSize; // k = x - y so maxK = maxX - maxY
     }
 
     //==============================================================================
@@ -69,20 +78,20 @@ class EditGraph {
 
     //==============================================================================
     private void cacheEndpointsOfFarthestReachingDPaths() {
+        //We number the diagonals in the edit graph so that diagonal k consists of points (x,y) for which x - y = k
+        //originalElements D-path end solely on odd diagonals when D is odd and even diagonals when D is even
         endpointsInDiagonalK.clear();
-        endpointsInDiagonalK.put(1, 0);
+        endpointsInDiagonalK.put(1, 0);// k=1 and x=0 so y=-1: required for first iteration
+
         //D-path is a path starting at (0,0) that has exactly D non-diagonal edges.
-        outside:
-        for (int D = 0; D <= MAX; D++) {
-            //We number the diagonals in the edit graph so that diagonal k consists of points (x,y) for which x - y = k
-            //originalElements D-path end solely on odd diagonals when D is odd and even diagonals when D is even
+        for (int D = 0; D <= editScriptMaxSize; D++) {
             for (int k = -D; k <= D; k += 2) {
                 Point endpoint = findEndpointOfFarthestReachingDPathInDiagonalK(D, k);
                 endpointsInDiagonalK.put(k, endpoint.x);
 
                 if (isLongestCommonSubsequenceFound(endpoint)) {
                     storeEndpointsOfDPath(endpointsInDiagonalK);
-                    break outside;
+                    return;
                 }
             }
             storeEndpointsOfDPath(endpointsInDiagonalK);
@@ -114,7 +123,7 @@ class EditGraph {
 
     //==============================================================================
     private boolean isLongestCommonSubsequenceFound(Point endpoint) {
-        return endpoint.x >= N && endpoint.y >= M;
+        return endpoint.x >= originalSize && endpoint.y >= newSize;
     }
 
     //==============================================================================
@@ -123,5 +132,4 @@ class EditGraph {
         copy.putAll(endpoints);
         endpointsOfFarthestReachingDPaths.add(copy);
     }
-
 }

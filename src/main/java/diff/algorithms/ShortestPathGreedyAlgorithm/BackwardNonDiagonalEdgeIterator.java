@@ -32,13 +32,10 @@ class BackwardNonDiagonalEdgeIterator implements Iterator<Edge> {
         d = d - 1;
         if (result.isVertical())
             k = k + 1;
-        else
+        else if (result.isHorizontal())
             k = k - 1;
-//
-//		if (result.isHorizontal())
-//			k = k - 1;
-//		else
-//			k = k + 1;
+        else
+            throw new RuntimeException("Non-diagonal edge is neither vertical nor horizontal.");
 
         return result;
     }
@@ -75,7 +72,7 @@ class BackwardNonDiagonalEdgeIterator implements Iterator<Edge> {
     //==============================================================================
     private Point traverseBackwardAlongDiagonal(Point endpoint) {
         Point result = new Point(endpoint);
-        while (result.x > 0 && result.y > 0 && editGraph.isMatchPoint(result.x, result.y))
+        while (result.x > 0 && result.y > 0 && editGraph.isMatchPoint(result))
             result.translate(-1, -1);
 
         return result;
