@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 class EditGraph {
-    public final Object[] originalElements;
-    public final Object[] newElements;
+    private final Object[] originalElements;
+    private final Object[] newElements;
     private final int N;
     private final int M;
     private final int MAX;
@@ -62,13 +62,13 @@ class EditGraph {
     public Map<Integer, Integer> getEndpointsOfFarthestReachingDPaths(int D) {
         boolean isCached = endpointsOfFarthestReachingDPaths.size() > 0;
         if (!isCached)
-            findEndpointsOfFarthestReachingDPaths();
+            cacheEndpointsOfFarthestReachingDPaths();
 
         return endpointsOfFarthestReachingDPaths.get(D);
     }
 
     //==============================================================================
-    private List<Map<Integer, Integer>> findEndpointsOfFarthestReachingDPaths() {
+    private void cacheEndpointsOfFarthestReachingDPaths() {
         endpointsInDiagonalK.clear();
         endpointsInDiagonalK.put(1, 0);
         //D-path is a path starting at (0,0) that has exactly D non-diagonal edges.
@@ -87,8 +87,6 @@ class EditGraph {
             }
             storeEndpointsOfDPath(endpointsInDiagonalK);
         }
-
-        return endpointsOfFarthestReachingDPaths;
     }
 
     //==============================================================================
@@ -122,7 +120,7 @@ class EditGraph {
     //==============================================================================
     private void storeEndpointsOfDPath(Map<Integer, Integer> endpoints) {
         Map<Integer, Integer> copy = new HashMap<Integer, Integer>();
-        copy.putAll(endpointsInDiagonalK);
+        copy.putAll(endpoints);
         endpointsOfFarthestReachingDPaths.add(copy);
     }
 

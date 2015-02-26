@@ -51,7 +51,7 @@ class BackwardNonDiagonalEdgeIterator implements Iterator<Edge> {
 
     private Point findEdgeEnd() {
         Point endpoint = getEndpointOfFarthestReachingDPathInDiagonalK(d, k);
-        Point dThNonDiagonalEdgeEnd = traverseBackwardAlongDiagonal(endpoint);
+        @SuppressWarnings("UnnecessaryLocalVariable") Point dThNonDiagonalEdgeEnd = traverseBackwardAlongDiagonal(endpoint);
         return dThNonDiagonalEdgeEnd;
     }
 
@@ -68,7 +68,7 @@ class BackwardNonDiagonalEdgeIterator implements Iterator<Edge> {
         }
 
 
-        Point dThNonDiagonalEdgeStart = new Point(x, y);
+        @SuppressWarnings("UnnecessaryLocalVariable") Point dThNonDiagonalEdgeStart = new Point(x, y);
         return dThNonDiagonalEdgeStart;
     }
 

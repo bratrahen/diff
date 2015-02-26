@@ -13,6 +13,7 @@ import org.junit.Test;
 
 public class ShortestPathGreedyAlgorithmTest {
 
+    @SuppressWarnings("FieldCanBeLocal")
     private final String originalSequence = "This part of the\n"
             + "document has stayed the\n"
             + "same from version to\n"
@@ -38,6 +39,7 @@ public class ShortestPathGreedyAlgorithmTest {
             + "be changed. Things can\n"
             + "be added after it.";
 
+    @SuppressWarnings("FieldCanBeLocal")
     private final String newSequence = "This is an important\n"
             + "notice! It should\n"
             + "therefore be located at\n"
@@ -67,6 +69,7 @@ public class ShortestPathGreedyAlgorithmTest {
             + "important new additions\n"
             + "to this document.\n";
 
+    @SuppressWarnings("FieldCanBeLocal")
     private final String normalDiffOutput = "0a1,6\n"
             + "> This is an important\n"
             + "> notice! It should\n"

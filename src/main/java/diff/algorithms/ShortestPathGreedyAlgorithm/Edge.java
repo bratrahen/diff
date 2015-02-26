@@ -19,10 +19,6 @@ class Edge {
         return start.y == end.y;
     }
 
-    public Point getEndPoint() {
-        return new Point(end);
-    }
-
     public int positionInOriginal() {
         return end.x;
     }
