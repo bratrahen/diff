@@ -6,7 +6,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.util.LinkedList;
 import java.util.List;
 
-class ShortestPathGreedyAlgorithm {
+public class ShortestPathGreedyAlgorithm {
 
     //==============================================================================
     public ImmutableList<EditCommand> diff(String A, String B) {
