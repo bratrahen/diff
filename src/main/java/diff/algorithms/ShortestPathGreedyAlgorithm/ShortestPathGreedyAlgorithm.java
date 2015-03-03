@@ -1,7 +1,6 @@
 package diff.algorithms.ShortestPathGreedyAlgorithm;
 
 import com.google.common.collect.ImmutableList;
-import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -10,12 +9,16 @@ public class ShortestPathGreedyAlgorithm {
 
     //==============================================================================
     public ImmutableList<EditCommand> diff(String originalString, String newString) {
-        return diff(ArrayUtils.toObject(originalString.toCharArray()), ArrayUtils.toObject(newString.toCharArray()));
+        return diff(new EditGraph(originalString, newString));
     }
 
     //==============================================================================
     public ImmutableList<EditCommand> diff(Object[] originalElements, Object[] newElements) {
-        EditGraph editGraph = new EditGraph(originalElements, newElements);
+        return diff(new EditGraph(originalElements, newElements));
+    }
+
+    //==============================================================================
+    private ImmutableList<EditCommand> diff(EditGraph editGraph) {
         List<EditCommand> editCommands = new LinkedList<EditCommand>();
 
         BackwardNonDiagonalEdgeIterator it = new BackwardNonDiagonalEdgeIterator(editGraph);

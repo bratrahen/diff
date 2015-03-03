@@ -14,7 +14,7 @@ class BackwardNonDiagonalEdgeIterator implements Iterator<Edge> {
 
     public BackwardNonDiagonalEdgeIterator(EditGraph editGraph) {
         this.editGraph = editGraph;
-        d = editGraph.getLengthOfShortestEditScript();
+        d = editGraph.lengthOfShortestEditScript();
         k = editGraph.getDiagonalOfLowerRightCorner();
     }
 
@@ -53,7 +53,7 @@ class BackwardNonDiagonalEdgeIterator implements Iterator<Edge> {
     }
 
     private Point findEdgeStart() {
-        Map<Integer, Integer> Vd1 = editGraph.getEndpointsOfFarthestReachingDPaths(d - 1);
+        Map<Integer, Integer> Vd1 = editGraph.getEndpointsOfFarthestReachingDPath(d - 1);
         int x;
         int y;
         if (Vd1.containsKey(k + 1)) {
@@ -80,7 +80,7 @@ class BackwardNonDiagonalEdgeIterator implements Iterator<Edge> {
 
     //==============================================================================
     private Point getEndpointOfFarthestReachingDPathInDiagonalK(int d, int k) {
-        Map<Integer, Integer> Vd = editGraph.getEndpointsOfFarthestReachingDPaths(d);
+        Map<Integer, Integer> Vd = editGraph.getEndpointsOfFarthestReachingDPath(d);
         int x = Vd.get(k);
         int y = x - k;
         return new Point(x, y);

@@ -1,5 +1,7 @@
 package diff.algorithms.ShortestPathGreedyAlgorithm;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +18,11 @@ class EditGraph {
     //Map<k,x> because by definition y = x - k
     private final Map<Integer, Integer> endpointsInDiagonalK = new HashMap<Integer, Integer>();
     private final List<Map<Integer, Integer>> endpointsOfFarthestReachingDPaths = new ArrayList<Map<Integer, Integer>>();
+
+    //==============================================================================
+    public EditGraph(String originalString, String newString) {
+        this(ArrayUtils.toObject(originalString.toCharArray()), ArrayUtils.toObject(newString.toCharArray()));
+    }
 
     //==============================================================================
     public EditGraph(Object[] originalElements, Object[] newElements) {
@@ -38,7 +45,6 @@ class EditGraph {
 
     //==============================================================================
     public Object getElementInOriginalCorrespondingTo(Edge edge) {
-        //convert to zero index
         return originalElements[zeroIndexFrom(edge.positionInOriginal())];
     }
 
@@ -57,8 +63,11 @@ class EditGraph {
     }
 
     //==============================================================================
-    public int getLengthOfShortestEditScript() {
-        getEndpointsOfFarthestReachingDPaths(0);
+    public int lengthOfShortestEditScript() {
+        boolean isCached = endpointsOfFarthestReachingDPaths.size() > 0;
+        if (!isCached)
+            cacheEndpointsOfFarthestReachingDPaths();
+
         return endpointsOfFarthestReachingDPaths.size() - 1; //minus one because we start outside graph boundary
     }
 
@@ -68,7 +77,7 @@ class EditGraph {
     }
 
     //==============================================================================
-    public Map<Integer, Integer> getEndpointsOfFarthestReachingDPaths(int D) {
+    public Map<Integer, Integer> getEndpointsOfFarthestReachingDPath(int D) {
         boolean isCached = endpointsOfFarthestReachingDPaths.size() > 0;
         if (!isCached)
             cacheEndpointsOfFarthestReachingDPaths();
