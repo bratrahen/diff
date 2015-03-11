@@ -19,9 +19,25 @@ public class EditCommand {
         return new EditCommand(EditCommand.Type.DELETE, position, element);
     }
 
+    public static EditCommand change(Object element, int position) {
+        return new EditCommand(EditCommand.Type.CHANGE, position, element);
+    }
+
+    public boolean isInsert() {
+        return type == Type.INSERT;
+    }
+
+    public boolean isChange() {
+        return type == Type.CHANGE;
+    }
+
+    public boolean isDelete() {
+        return type == Type.DELETE;
+    }
+
     public String toString() {
         return position + (type == Type.DELETE ? "- " : "+ ") + element;
     }
 
-    public enum Type {INSERT, DELETE}
+    public enum Type {INSERT, DELETE, CHANGE, NULL}
 }
