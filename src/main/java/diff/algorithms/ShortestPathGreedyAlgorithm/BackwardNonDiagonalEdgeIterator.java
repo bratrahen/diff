@@ -5,24 +5,26 @@ import java.awt.*;
 import java.util.Iterator;
 import java.util.Map;
 
-//==============================================================================
 class BackwardNonDiagonalEdgeIterator implements Iterator<Edge> {
     private final EditGraph editGraph;
     private int d;
     private int k;
 
 
+    //==============================================================================
     public BackwardNonDiagonalEdgeIterator(EditGraph editGraph) {
         this.editGraph = editGraph;
         d = editGraph.lengthOfShortestEditScript();
         k = editGraph.getDiagonalOfLowerRightCorner();
     }
 
+    //==============================================================================
     @Override
     public boolean hasNext() {
         return d > 0;
     }
 
+    //==============================================================================
     @Override
     public Edge next() {
         Point start = findEdgeStart();
@@ -40,33 +42,28 @@ class BackwardNonDiagonalEdgeIterator implements Iterator<Edge> {
         return result;
     }
 
+    //==============================================================================
     @Override
     public void remove() {
         throw new UnsupportedOperationException();
 
     }
 
+    //==============================================================================
     private Point findEdgeEnd() {
         Point endpoint = getEndpointOfFarthestReachingDPathInDiagonalK(d, k);
         @SuppressWarnings("UnnecessaryLocalVariable") Point dThNonDiagonalEdgeEnd = traverseBackwardAlongDiagonal(endpoint);
         return dThNonDiagonalEdgeEnd;
     }
 
+    //==============================================================================
     private Point findEdgeStart() {
-        Map<Integer, Integer> Vd1 = editGraph.getEndpointsOfFarthestReachingDPath(d - 1);
-        int x;
-        int y;
-        if (Vd1.containsKey(k + 1)) {
-            x = Vd1.get(k + 1);
-            y = x - (k + 1);
-        } else {
-            x = Vd1.get(k - 1);
-            y = x - (k - 1);
-        }
+        Map<Integer, Point> Vd1 = editGraph.getEndpointsOfFarthestReachingDPath(d - 1);
 
-
-        @SuppressWarnings("UnnecessaryLocalVariable") Point dThNonDiagonalEdgeStart = new Point(x, y);
-        return dThNonDiagonalEdgeStart;
+        if (Vd1.containsKey(k + 1))
+            return Vd1.get(k + 1);
+        else
+            return Vd1.get(k - 1);
     }
 
     //==============================================================================
@@ -80,10 +77,8 @@ class BackwardNonDiagonalEdgeIterator implements Iterator<Edge> {
 
     //==============================================================================
     private Point getEndpointOfFarthestReachingDPathInDiagonalK(int d, int k) {
-        Map<Integer, Integer> Vd = editGraph.getEndpointsOfFarthestReachingDPath(d);
-        int x = Vd.get(k);
-        int y = x - k;
-        return new Point(x, y);
+        Map<Integer, Point> Vd = editGraph.getEndpointsOfFarthestReachingDPath(d);
+        return Vd.get(k);
     }
 }
 

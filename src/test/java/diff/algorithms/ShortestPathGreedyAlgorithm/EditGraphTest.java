@@ -3,6 +3,7 @@ package diff.algorithms.ShortestPathGreedyAlgorithm;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.awt.*;
 import java.util.Map;
 
 public class EditGraphTest {
@@ -58,14 +59,14 @@ public class EditGraphTest {
         EditGraph graph = new EditGraph(A, B);
 
         int D = 0;
-        Map<Integer, Integer> endpoints = graph.getEndpointsOfFarthestReachingDPath(D);
+        Map<Integer, Point> endpoints = graph.getEndpointsOfFarthestReachingDPath(D);
 
         int cornerX = A.length();
         int cornerY = B.length();
         int diagonalK = 0;
 
         Assert.assertTrue(endpoints.keySet().contains(diagonalK));
-        int furthestEndpointX = endpoints.get(diagonalK);
+        int furthestEndpointX = endpoints.get(diagonalK).x;
         int furthestEndpointY = furthestEndpointX - diagonalK;
 
         Assert.assertEquals(cornerX, furthestEndpointX);
@@ -79,14 +80,14 @@ public class EditGraphTest {
         EditGraph graph = new EditGraph(A, B);
 
         int D = B.length() - A.length();
-        Map<Integer, Integer> endpoints = graph.getEndpointsOfFarthestReachingDPath(D);
+        Map<Integer, Point> endpoints = graph.getEndpointsOfFarthestReachingDPath(D);
 
         int cornerX = A.length();
         int cornerY = B.length();
         int diagonalK = cornerX - cornerY;
 
         Assert.assertTrue(endpoints.keySet().contains(diagonalK));
-        int furthestEndpointX = endpoints.get(diagonalK);
+        int furthestEndpointX = endpoints.get(diagonalK).x;
         int furthestEndpointY = furthestEndpointX - diagonalK;
 
         Assert.assertEquals(cornerX, furthestEndpointX);
@@ -100,14 +101,14 @@ public class EditGraphTest {
         EditGraph graph = new EditGraph(A, B);
 
         int D = A.length() - B.length();
-        Map<Integer, Integer> endpoints = graph.getEndpointsOfFarthestReachingDPath(D);
+        Map<Integer, Point> endpoints = graph.getEndpointsOfFarthestReachingDPath(D);
 
         int cornerX = A.length();
         int cornerY = B.length();
         int diagonalK = cornerX - cornerY;
 
         Assert.assertTrue(endpoints.keySet().contains(diagonalK));
-        int furthestEndpointX = endpoints.get(diagonalK);
+        int furthestEndpointX = endpoints.get(diagonalK).x;
         int furthestEndpointY = furthestEndpointX - diagonalK;
 
         Assert.assertEquals(cornerX, furthestEndpointX);
@@ -121,14 +122,14 @@ public class EditGraphTest {
         EditGraph graph = new EditGraph(A, B);
 
         int D = 2 * 2;
-        Map<Integer, Integer> endpoints = graph.getEndpointsOfFarthestReachingDPath(D);
+        Map<Integer, Point> endpoints = graph.getEndpointsOfFarthestReachingDPath(D);
 
         int cornerX = A.length();
         int cornerY = B.length();
         int diagonalK = 0;
 
         Assert.assertTrue(endpoints.keySet().contains(diagonalK));
-        int furthestEndpointX = endpoints.get(diagonalK);
+        int furthestEndpointX = endpoints.get(diagonalK).x;
         int furthestEndpointY = furthestEndpointX - diagonalK;
 
         Assert.assertEquals(cornerX, furthestEndpointX);

@@ -16,8 +16,8 @@ class EditGraph {
     private final int editScriptMaxSize;
 
     //Map<k,x> because by definition y = x - k
-    private final Map<Integer, Integer> endpointsInDiagonalK = new HashMap<Integer, Integer>();
-    private final List<Map<Integer, Integer>> endpointsOfFarthestReachingDPaths = new ArrayList<Map<Integer, Integer>>();
+    private final Map<Integer, Point> endpointsInDiagonalK = new HashMap<Integer, Point>();
+    private final List<Map<Integer, Point>> endpointsOfFarthestReachingDPaths = new ArrayList<Map<Integer, Point>>();
 
     //==============================================================================
     public EditGraph(String originalString, String newString) {
@@ -77,7 +77,7 @@ class EditGraph {
     }
 
     //==============================================================================
-    public Map<Integer, Integer> getEndpointsOfFarthestReachingDPath(int D) {
+    public Map<Integer, Point> getEndpointsOfFarthestReachingDPath(int D) {
         boolean isCached = endpointsOfFarthestReachingDPaths.size() > 0;
         if (!isCached)
             cacheEndpointsOfFarthestReachingDPaths();
@@ -90,13 +90,13 @@ class EditGraph {
         //We number the diagonals in the edit graph so that diagonal k consists of points (x,y) for which x - y = k
         //originalElements D-path end solely on odd diagonals when D is odd and even diagonals when D is even
         endpointsInDiagonalK.clear();
-        endpointsInDiagonalK.put(1, 0);// k=1 and x=0 so y=-1: required for first iteration
+        endpointsInDiagonalK.put(1, new Point(0, 0 - 1));// k=1 and x=0 so y=-1: required for first iteration
 
         //D-path is a path starting at (0,0) that has exactly D non-diagonal edges.
         for (int D = 0; D <= editScriptMaxSize; D++) {
             for (int k = -D; k <= D; k += 2) {
                 Point endpoint = findEndpointOfFarthestReachingDPathInDiagonalK(D, k);
-                endpointsInDiagonalK.put(k, endpoint.x);
+                endpointsInDiagonalK.put(k, endpoint);
 
                 if (isLongestCommonSubsequenceFound(endpoint)) {
                     storeEndpointsOfDPath(endpointsInDiagonalK);
@@ -110,10 +110,10 @@ class EditGraph {
     //==============================================================================
     private Point findEndpointOfFarthestReachingDPathInDiagonalK(int D, int k) {
         int x;
-        if (k == -D || k != D && endpointsInDiagonalK.get(k - 1) < endpointsInDiagonalK.get(k + 1)) {
-            x = endpointsInDiagonalK.get(k + 1);
+        if (k == -D || k != D && endpointsInDiagonalK.get(k - 1).x < endpointsInDiagonalK.get(k + 1).x) {
+            x = endpointsInDiagonalK.get(k + 1).x;
         } else {
-            x = endpointsInDiagonalK.get(k - 1) + 1;
+            x = endpointsInDiagonalK.get(k - 1).x + 1;
         }
 
         int y = x - k;
@@ -136,8 +136,8 @@ class EditGraph {
     }
 
     //==============================================================================
-    private void storeEndpointsOfDPath(Map<Integer, Integer> endpoints) {
-        Map<Integer, Integer> copy = new HashMap<Integer, Integer>();
+    private void storeEndpointsOfDPath(Map<Integer, Point> endpoints) {
+        Map<Integer, Point> copy = new HashMap<Integer, Point>();
         copy.putAll(endpoints);
         endpointsOfFarthestReachingDPaths.add(copy);
     }
