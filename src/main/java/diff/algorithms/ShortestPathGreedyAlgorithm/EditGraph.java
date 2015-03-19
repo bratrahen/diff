@@ -34,6 +34,11 @@ class EditGraph {
     }
 
     //==============================================================================
+    public static int diagonalNumberAt(Point point) {
+        return point.x - point.y;
+    }
+
+    //==============================================================================
     private static int zeroIndexFrom(int xOrY) {
         return xOrY - 1;
     }
@@ -72,8 +77,8 @@ class EditGraph {
     }
 
     //==============================================================================
-    public int getDiagonalOfLowerRightCorner() {
-        return originalSize - newSize; // k = x - y so maxK = maxX - maxY
+    public Point lowerRightCorner() {
+        return new Point(originalSize, newSize);
     }
 
     //==============================================================================
@@ -90,7 +95,8 @@ class EditGraph {
         //We number the diagonals in the edit graph so that diagonal k consists of points (x,y) for which x - y = k
         //originalElements D-path end solely on odd diagonals when D is odd and even diagonals when D is even
         endpointsInDiagonalK.clear();
-        endpointsInDiagonalK.put(1, new Point(0, 0 - 1));// k=1 and x=0 so y=-1: required for first iteration
+        //endpointsInDiagonalK.put(1, new Point(0, 0 - 1));// k=1 and x=0 so y=-1: required for first iteration
+        endpointsInDiagonalK.put(-1, new Point(-1, 0));// k=-1 and y=0 so x=-1: required for first iteration
 
         //D-path is a path starting at (0,0) that has exactly D non-diagonal edges.
         for (int D = 0; D <= editScriptMaxSize; D++) {
@@ -109,16 +115,16 @@ class EditGraph {
 
     //==============================================================================
     private Point findEndpointOfFarthestReachingDPathInDiagonalK(int D, int k) {
-        int x;
-        if (k == -D || k != D && endpointsInDiagonalK.get(k - 1).x < endpointsInDiagonalK.get(k + 1).x) {
-            x = endpointsInDiagonalK.get(k + 1).x;
+        Point result;
+
+        if (k == D || k != -D && endpointsInDiagonalK.get(k - 1).y > endpointsInDiagonalK.get(k + 1).y) {
+            result = (Point) endpointsInDiagonalK.get(k - 1).clone();
+            result.translate(1, 0);
         } else {
-            x = endpointsInDiagonalK.get(k - 1).x + 1;
+            result = (Point) endpointsInDiagonalK.get(k + 1).clone();
+            result.translate(0, 1);
         }
 
-        int y = x - k;
-
-        Point result = new Point(x, y);
         traverseForwardAlongDiagonal(result);
         return result;
     }

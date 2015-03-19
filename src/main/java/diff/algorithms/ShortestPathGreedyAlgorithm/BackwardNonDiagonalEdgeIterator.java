@@ -3,41 +3,34 @@ package diff.algorithms.ShortestPathGreedyAlgorithm;
 
 import java.awt.*;
 import java.util.Iterator;
-import java.util.Map;
 
 class BackwardNonDiagonalEdgeIterator implements Iterator<Edge> {
     private final EditGraph editGraph;
-    private int d;
-    private int k;
-
+    private int pathLength;
+    private Point currentEndpoint;
 
     //==============================================================================
     public BackwardNonDiagonalEdgeIterator(EditGraph editGraph) {
         this.editGraph = editGraph;
-        d = editGraph.lengthOfShortestEditScript();
-        k = editGraph.getDiagonalOfLowerRightCorner();
+        this.pathLength = editGraph.lengthOfShortestEditScript();
+        this.currentEndpoint = editGraph.lowerRightCorner();
     }
 
     //==============================================================================
     @Override
     public boolean hasNext() {
-        return d > 0;
+        return pathLength > 0;
     }
 
     //==============================================================================
     @Override
     public Edge next() {
-        Point start = findEdgeStart();
-        Point end = findEdgeEnd();
-        Edge result = new Edge(start, end);
+        Point edgeEnd = traverseBackwardAlongDiagonal(currentEndpoint);
+        Point edgeStart = translateBackwardPerpendicularly(edgeEnd);
+        Edge result = new Edge(edgeStart, edgeEnd);
 
-        d = d - 1;
-        if (result.isVertical())
-            k = k + 1;
-        else if (result.isHorizontal())
-            k = k - 1;
-        else
-            throw new RuntimeException("Non-diagonal edge is neither vertical nor horizontal.");
+        currentEndpoint = edgeStart;
+        pathLength--;
 
         return result;
     }
@@ -46,24 +39,6 @@ class BackwardNonDiagonalEdgeIterator implements Iterator<Edge> {
     @Override
     public void remove() {
         throw new UnsupportedOperationException();
-
-    }
-
-    //==============================================================================
-    private Point findEdgeEnd() {
-        Point endpoint = getEndpointOfFarthestReachingDPathInDiagonalK(d, k);
-        @SuppressWarnings("UnnecessaryLocalVariable") Point dThNonDiagonalEdgeEnd = traverseBackwardAlongDiagonal(endpoint);
-        return dThNonDiagonalEdgeEnd;
-    }
-
-    //==============================================================================
-    private Point findEdgeStart() {
-        Map<Integer, Point> Vd1 = editGraph.getEndpointsOfFarthestReachingDPath(d - 1);
-
-        if (Vd1.containsKey(k + 1))
-            return Vd1.get(k + 1);
-        else
-            return Vd1.get(k - 1);
     }
 
     //==============================================================================
@@ -76,9 +51,22 @@ class BackwardNonDiagonalEdgeIterator implements Iterator<Edge> {
     }
 
     //==============================================================================
-    private Point getEndpointOfFarthestReachingDPathInDiagonalK(int d, int k) {
-        Map<Integer, Point> Vd = editGraph.getEndpointsOfFarthestReachingDPath(d);
-        return Vd.get(k);
+    private Point translateBackwardPerpendicularly(Point endpoint) {
+        Point translatedHorizontally = new Point(endpoint.x - 1, endpoint.y);
+        if (isNeighbourEndpoint(translatedHorizontally))
+            return translatedHorizontally;
+
+        Point translatedVertically = new Point(endpoint.x, endpoint.y - 1);
+        if (isNeighbourEndpoint(translatedVertically))
+            return translatedVertically;
+
+        throw new RuntimeException("Non-diagonal edge expected but not found [? -> " + endpoint + "]");
+    }
+
+    //==============================================================================
+    private boolean isNeighbourEndpoint(Point endpoint) {
+        Point farthestEndpoint = editGraph.getEndpointsOfFarthestReachingDPath(pathLength - 1).get(EditGraph.diagonalNumberAt(endpoint));
+        return farthestEndpoint != null && farthestEndpoint.equals(endpoint);
     }
 }
 
