@@ -30,7 +30,7 @@ public class ShortestPathGreedyAlgorithm {
                 Object element = editGraph.getElementInOriginalCorrespondingTo(edge);
                 editCommands.add(0, EditCommand.delete(element, edge.positionInOriginal()));
             } else {
-                throw new RuntimeException("Non-diagonal edge is neither vertical nor horizontal.");
+                throw new RuntimeException("Non-diagonal edge " + edge + " is neither vertical nor horizontal.");
             }
         }
         return editCommands;
